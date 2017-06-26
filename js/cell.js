@@ -7,14 +7,14 @@ function Cell(i, j, size) {
 	this.y = j * size;
 
 	this.mine = false;
-	this.revealed = true;
+	this.revealed = false;
 	this.size = size;
+	this.flagged = false;
 }
 
 Cell.prototype.show = function() {
 	stroke(0);
-	noFill();
-	rect(this.x, this.y, this.size, this.size);
+	
 
 	if(this.revealed) {
 		if(this.mine) {
@@ -22,14 +22,16 @@ Cell.prototype.show = function() {
 			let offset = (this.size / 2);
 			ellipse(this.x + offset, this.y + offset, this.size/2);
 		} else {
+			fill(200);
+			rect(this.x, this.y, this.size, this.size);
 			//not a mine
-			// show the number, if nevessary
+			//show the number, if nevessary
 		}
 	}
-
 	//Not revealed yet
 	else {
-		fill(200);
-		
+		noFill();
+		rect(this.x, this.y, this.size, this.size);
 	}
 }
+

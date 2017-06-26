@@ -40,6 +40,22 @@ function draw() {
 	}
 }
 
+function mouseReleased() {
+
+	switch(mouseButton) {
+		case LEFT:
+			let i = Math.floor(mouseX / CELL_SIZE);
+			let j = Math.floor(mouseY / CELL_SIZE);
+			grid[i][j].revealed = true;
+
+		break;
+
+		case RIGHT:
+			//flag the cell
+		break;
+	}
+}
+
 function setMines(count) {
 	while(count) {
 		let i = Math.floor(random(GRID_SIZE));
