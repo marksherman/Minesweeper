@@ -13,6 +13,23 @@ function Cell(i, j, size) {
 
 Cell.prototype.show = function() {
 	stroke(0);
-	fill(200);
+	noFill();
 	rect(this.x, this.y, this.size, this.size);
+
+	if(this.revealed) {
+		if(this.mine) {
+			fill(0);
+			let offset = (this.size / 2);
+			ellipse(this.x + offset, this.y + offset, this.size/2);
+		} else {
+			//not a mine
+			// show the number, if nevessary
+		}
+	}
+
+	//Not revealed yet
+	else {
+		fill(200);
+		
+	}
 }
