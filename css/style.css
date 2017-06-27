@@ -1,7 +1,7 @@
 body {
 	background: rgba(255,250,228,1);
 	font-family: 'Monaco', 'Courier New', fixed-width;
-	font-size: 13pt;
+	font-size: 12pt;
 }
 
 .center {
@@ -27,6 +27,8 @@ body {
 
 .header {
 	margin: 10px 0 10px 0;
+	font-size: 15pt;
+	font-weight: bold;
 }
 
 .button {

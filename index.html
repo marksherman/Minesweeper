@@ -11,6 +11,7 @@
 	
 	<div id="headers" class="textCenter">
 		<h1 class="header">Minesweeper</h1>
+		<p>Left click to reveal, Right click to flag</p>
 	</div>
 
 	<div id="canvas-holder" class="textCenter"></div>
@@ -18,12 +19,15 @@
 	<div id="ui-holder" class="center wrapper">
 		<input id="restart" class="button flex-item" type="button" value="RESTART">
 		<!-- Selecting difficulty -->
-		<select required class="flex-item" id="difficulty">
-			<option value="10" default>Easy</option>
-			<option value="25" >Medium</option>
-			<option value="50" >Hard</option>
-			<option value="80" >Extreme</option>
-		</select>
+		<span>			
+			Difficulty:
+			<select required class="flex-item" id="difficulty">
+				<option value="10" default>Easy</option>
+				<option value="25" >Medium</option>
+				<option value="50" >Hard</option>
+				<option value="80" >Extreme</option>
+			</select>
+		</span>
 
 		<span>
 			<input checked id="particles" class="flex-item" type="checkbox" />
