@@ -1,11 +1,14 @@
 var grid;
-var CELL_SIZE; //pixel size of each cell
-const GRID_SIZE = 15; //number of cells in a row/col
-const CANVAS_W = 401; //1 pixel extra to cover stroke()
+var CELL_SIZE; 			//pixel size of each cell
+const GRID_SIZE = 5; 	//number of cells in a row/col
+const CANVAS_W = 401; 	//1 pixel extra to cover stroke()
 const CANVAS_H = 401;
-var MINE_COUNT = 25;
-var myCanvas;
-var mines;
+var MINE_COUNT = 3;		// number of mines total on grid
+var myCanvas;			// html canvas reference
+var mines;				// all the coordinates for mines
+var state;
+const PLAYING = 0, WON = 1, LOST = 2;
+var flagCount;
 
 function setup() {
 
@@ -32,6 +35,12 @@ function setup() {
 
 	//Randomly set the mines around the map
 	setMines(MINE_COUNT);
+	state = PLAYING;
+	flagCount = 0;
+
+	//User Interface
+	var resetButton = createButton('Restart');
+	
 }
 
 function draw() {
@@ -48,7 +57,7 @@ function mouseReleased() {
 	let i = Math.floor(mouseX / CELL_SIZE);
 	let j = Math.floor(mouseY / CELL_SIZE);
 
-	if(!(i <= GRID_SIZE && j <= GRID_SIZE)) return;
+	if(i > GRID_SIZE || j > GRID_SIZE || i < 0 || j < 0 || (state !== PLAYING)) return;
 
 	switch(mouseButton) {
 		case LEFT:
@@ -58,6 +67,7 @@ function mouseReleased() {
 					for(let s = 0; s < mines.length; s++) {
 						grid[mines[s][0]][mines[s][1]].explode();
 					}
+					gameOver();
 				} else {
 					revealCell(i, j);
 				}
@@ -66,7 +76,15 @@ function mouseReleased() {
 		break;
 
 		case RIGHT:
-			grid[i][j].setFlagged((grid[i][j].flagged ? false : true));
+
+			if(grid[i][j].flagged) {
+				grid[i][j].setFlagged(false);
+				flagCount--;
+			} else if(flagCount < MINE_COUNT) {
+				grid[i][j].setFlagged(true);
+				flagCount++;
+			}
+			checkWin();
 		break;
 	}
 }
@@ -134,9 +152,33 @@ function revealCell(i, j) {
 }
 
 function gameOver() {
+	console.log('game lost');
+	console.log(score());
+	state = LOST;
+}
 
+function gameWon() {
+	console.log('game won');
+	console.log(score());
+	state = WON;
 }
 
 function resetGame() {
 
 }
+
+function checkWin() {
+	if(minesFlagged() === mines.length) gameWon();
+}
+
+function minesFlagged() {
+	let count = 0;
+	for(let i = 0; i < mines.length; i++) {
+		if( grid[mines[i][0]][mines[i][1]].flagged ) {
+			count++;
+		}
+	}
+	return count;
+}
+
+var score = () => (Math.floor((minesFlagged() / MINE_COUNT) * 100));
