@@ -53,19 +53,16 @@ function mouseReleased() {
 	switch(mouseButton) {
 		case LEFT:
 
-			//If the cell is not flagegd,
-			//reveal the cell, if it's a mine, 
-			// explode all mines once.
-
 			if(!grid[i][j].flagged) {
-				grid[i][j].reveal();
-				
 				if(grid[i][j].mine) {
 					for(let s = 0; s < mines.length; s++) {
 						grid[mines[s][0]][mines[s][1]].explode();
 					}
+				} else {
+					revealCell(i, j);
 				}
 			}
+
 		break;
 
 		case RIGHT:
@@ -102,7 +99,7 @@ function setMines(count) {
 function thisManyMines(list) {
 	var count = 0;
 	for(let x = 0; x < list.length; x++) {
-		count += grid[list[x].i][list[x].j].mine ? 1 : 0;
+		count += grid[list[x][0]][list[x][1]].mine ? 1 : 0;
 	}
 	return count;
 }
@@ -115,16 +112,25 @@ function getNeighbors(i, j) {
 	for(let k = i - 1; k < i + 2; k++) {
 		for(let l = j - 1; l < j + 2; l++) {
 			if(k >= 0 && l >= 0 && l < GRID_SIZE && k < GRID_SIZE && !(k === i && l === j)) {
-				let obj = {
-					i: k,
-					j: l
-				};
-				neighbors.push(obj);
+				neighbors.push([k, l]);
 			}
 		}
 	}
 
 	return neighbors;
+}
+
+function revealCell(i, j) {
+	grid[i][j].reveal();
+
+	if(grid[i][j].neighborMines === 0) {
+		let myNeighbors = getNeighbors(i, j);
+		for(let s = 0; s < myNeighbors.length; s++) {
+			if(!grid[myNeighbors[s][0]][myNeighbors[s][1]].revealed) {
+				revealCell(myNeighbors[s][0], myNeighbors[s][1]);
+			}
+		}
+	}
 }
 
 function gameOver() {

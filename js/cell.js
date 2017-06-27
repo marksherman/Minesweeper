@@ -75,7 +75,7 @@ Cell.prototype.show = function() {
 	// NOT revealed yet
 	else {
 		if(this.flagged) {
-			fill(105,210,231, 0.7);
+			fill(244,221,81, 0.7);
 			rect(this.x, this.y, this.size, this.size);
 
 			textSize(this.size);
