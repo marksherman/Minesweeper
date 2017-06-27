@@ -14,24 +14,36 @@ function Cell(i, j, size) {
 
 Cell.prototype.show = function() {
 	stroke(0);
-	
 
+	// If this block is revealed,
+	// then if it's a mine show/animate a mine
+	// if its not, show a number or block
 	if(this.revealed) {
 		if(this.mine) {
-			fill(0);
-			let offset = (this.size / 2);
-			ellipse(this.x + offset, this.y + offset, this.size/2);
-		} else {
-			fill(200);
+			fill(250,105,0, 0.8);
 			rect(this.x, this.y, this.size, this.size);
-			//not a mine
-			//show the number, if nevessary
+			let offset = (this.size / 2);
+			fill(12, 12, 12, 1);
+			ellipse(this.x + offset, this.y + offset, this.size/2);
+		}
+		// NOT a mine
+		else {
+			fill(105,210,231, 0.6);
+			rect(this.x, this.y, this.size, this.size);
+
 		}
 	}
-	//Not revealed yet
+	// NOT revealed yet
 	else {
-		noFill();
+		fill(105,210,231, 1);
 		rect(this.x, this.y, this.size, this.size);
 	}
 }
 
+Cell.prototype.reveal = function() {
+	this.revealed = true;
+}
+
+Cell.prototype.flag = function() {
+	this.flagged = true;
+}

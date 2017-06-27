@@ -15,6 +15,7 @@ function setup() {
 	MINE_COUNT = (MINE_COUNT > MAX_MINES) ? MAX_MINES : MINE_COUNT; 
 
 	createCanvas(CANVAS_W, CANVAS_H);
+	colorMode(RGB, 255, 255, 255, 1);
 
 	//stores the cells in a grid array
 	//used for iterating through all the cells
@@ -31,7 +32,7 @@ function setup() {
 }
 
 function draw() {
-	background(127);
+	background(255, 255, 255, 1);
 
 	for(let i = 0; i < GRID_SIZE; i++) {
 		for(let j = 0; j < GRID_SIZE; j++) {
@@ -41,17 +42,17 @@ function draw() {
 }
 
 function mouseReleased() {
+	let i = Math.floor(mouseX / CELL_SIZE);
+	let j = Math.floor(mouseY / CELL_SIZE);
 
 	switch(mouseButton) {
-		case LEFT:
-			let i = Math.floor(mouseX / CELL_SIZE);
-			let j = Math.floor(mouseY / CELL_SIZE);
-			grid[i][j].revealed = true;
 
+		case LEFT:
+			grid[i][j].reveal();
 		break;
 
 		case RIGHT:
-			//flag the cell
+			grid[i][j].flag();
 		break;
 	}
 }
