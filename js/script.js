@@ -31,6 +31,10 @@ function draw() {
 			grid[i][j].show();
 		}
 	}
+
+	if(state !== PLAYING) {
+		displayEndGame();
+	}
 }
 
 function mouseReleased() {
@@ -143,6 +147,34 @@ function gameWon() {
 	state = WON;
 }
 
+function displayEndGame() {
+	console.log('game ended');
+	fill(240,240,240,0.8);
+	noStroke();
+	rect(0, CANVAS_H/4, CANVAS_W, CANVAS_H/2);
+
+	textSize(CANVAS_W/8);
+	textAlign(CENTER);
+	noStroke();
+	fill(50, 50, 50, 0.7);
+
+	let msg;
+	if(state === WON) {
+		fill(0,142,9, 1);
+		msg = 'You Won!';
+	} else {
+		fill(255,3,3, 1);
+		msg = 'You Lost!';
+	}
+
+	text(msg, CANVAS_W/2, CANVAS_H/2);
+
+	textSize(CANVAS_W/16);
+	msg = 'SCORE: ' + score() + ' / 100';
+	text(msg, CANVAS_W/2, CANVAS_H/2 + 80);
+
+}
+
 function resetGame() {
 	mines = [];
 	grid = [];
@@ -208,5 +240,5 @@ function userInterface() {
 }
 
 function updateScore(s) {
-	scoreHolder.innerHTML = 'Score: ' + s;
+	scoreHolder.innerHTML = 'Score: ' + s + ' / 100';
 }
