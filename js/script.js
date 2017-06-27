@@ -1,16 +1,22 @@
-var CELL_SIZE; 			//pixel size of each cell
-const GRID_SIZE = 20; 	//number of cells in a row/col
-const CANVAS_W = 401; 	//1 pixel extra to cover stroke()
-const CANVAS_H = 401;
-var MINE_COUNT = 20;		// number of mines total on grid
+var GRID_SIZE; 	//number of cells in a row/col
+var diff;
+var CANVAS_W; 	//1 pixel extra to cover stroke()
+var CANVAS_H;
+var MINE_COUNT;		// number of mines total on grid
 var myCanvas;			// html canvas reference
-var grid, mines, state, flagCount;				// all the coordinates for mines
+var grid, mines, state, flagCount, CELL_SIZE;
 const PLAYING = 0, WON = 1, LOST = 2;
+
+var MIN_MINES, MAX_MINES;
+
+//html5 component holders
+var scoreHolder, restartBtn, particles;
 
 function setup() {
 
+	userInterface();
 	resetGame();
-
+	
 	colorMode(RGB, 255, 255, 255, 1);
 	myCanvas = createCanvas(CANVAS_W, CANVAS_H);
 	myCanvas.parent('canvas-holder');
@@ -39,7 +45,7 @@ function mouseReleased() {
 			if(!grid[i][j].flagged) {
 				if(grid[i][j].mine) {
 					for(let s = 0; s < mines.length; s++) {
-						grid[mines[s][0]][mines[s][1]].explode();
+						grid[mines[s][0]][mines[s][1]].explode(particles.checked);
 					}
 					gameOver();
 				} else {
@@ -140,11 +146,20 @@ function gameWon() {
 function resetGame() {
 	mines = [];
 	grid = [];
-	CELL_SIZE = Math.floor(CANVAS_W / GRID_SIZE);
+	GRID_SIZE = diff.value;
 
-	// Check if the mine count is more than the maximum allowed for this grid.
-	var MAX_MINES = GRID_SIZE * GRID_SIZE;
-	MINE_COUNT = (MINE_COUNT > MAX_MINES) ? MAX_MINES : MINE_COUNT;
+	document.getElementById('ui-holder').style.width = CANVAS_W + 'px';
+
+	let tempWidth = Math.floor(window.innerWidth * 0.8);
+	CANVAS_W = CANVAS_H = tempWidth < 801 ? tempWidth : 801;
+
+	//Minimum = 15% of the board are mines
+	//Maximum = 20% of the board are mines
+	MIN_MINES = 0.15 * GRID_SIZE * GRID_SIZE;
+	MAX_MINES = 0.20 * GRID_SIZE * GRID_SIZE;
+
+	MINE_COUNT = Math.floor(random(MIN_MINES, MAX_MINES));
+	CELL_SIZE = Math.floor(CANVAS_W / GRID_SIZE);
 
 	//stores the cells in a grid array
 	//used for iterating through all the cells
@@ -182,13 +197,15 @@ var score = () => (Math.floor((minesFlagged() / MINE_COUNT) * 100));
 
 // USER INTERFACE AND INTERACTION
 // BEGINS HERE
+function userInterface() {
+	particles = document.getElementById('particles');
 
-var restartBtn = document.getElementById('restart');
-var scoreHolder = document.getElementById('score');
-
-document.getElementById('ui-holder').style.width = CANVAS_W + 'px';
-
-restartBtn.addEventListener('click', resetGame);
+	diff = document.getElementById('difficulty');
+	restartBtn = document.getElementById('restart');
+	scoreHolder = document.getElementById('score');
+	restartBtn.addEventListener('click', resetGame);
+	diff.addEventListener('change', resetGame);
+}
 
 function updateScore(s) {
 	scoreHolder.innerHTML = 'Score: ' + s;

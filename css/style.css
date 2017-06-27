@@ -1,6 +1,7 @@
 body {
 	background: rgba(255,250,228,1);
 	font-family: 'Monaco', 'Courier New', fixed-width;
+	font-size: 13pt;
 }
 
 .center {
@@ -16,12 +17,8 @@ body {
 	align-content: center;
 }
 
-.left {
-	float: right;
-}
-
-.right {
-	float: right;
+#ui-holder {
+	max-width: 800px;
 }
 
 .textCenter {

@@ -17,7 +17,7 @@ function Cell(i, j, size) {
 
 function Particle(x, y, vel, size) {
 	this.accel = createVector(0, 0.4);
-	this.lifetime = 150;
+	this.lifetime = 50;
 	this.pos = createVector(x, y);
 	this.vel = vel;
 	this.size = size;
@@ -25,6 +25,7 @@ function Particle(x, y, vel, size) {
 	this.show = () => {
 		this.lifetime += (this.lifetime > 0) ? -1 : 0;
 		if(this.lifetime > 0) {
+			this.lifetime--;
 
 			//Update position based on velocity
 			this.pos.add(this.vel);
@@ -35,7 +36,7 @@ function Particle(x, y, vel, size) {
 			//Add some drag
 			// this.vel.x += 2;
 
-			fill(35, 35, 35, 0.2);
+			fill(35, 35, 35, this.lifetime / 100);
 			noStroke();
 			ellipse(this.pos.x, this.pos.y, this.size);
 
@@ -44,7 +45,7 @@ function Particle(x, y, vel, size) {
 }
 
 Cell.prototype.show = function() {
-	stroke(0);
+	stroke(0,0,0,0.2);
 	var offset = (this.size / 2);
 	// If this block is revealed,
 	// then if it's a mine show/animate a mine
@@ -110,11 +111,13 @@ Cell.prototype.setNeighborCount = function(c) {
 	this.neighborMines = c;
 }
 
-Cell.prototype.explode = function() {
+Cell.prototype.explode = function(particles) {
 	this.revealed = true;
-	let s = this.size * 0.20;
+	let s = this.size * 0.50;
 
-	for(let i = 0; i < 10; i++) {
+	if(!particles) return;
+
+	for(let i = 0; i < 4; i++) {
 		let randVect = createVector(Math.floor(random(-6, 6)), Math.floor(random(-6, 6)));
 		this.particles.push(new Particle(this.x, this.y, randVect, s));
 	}
