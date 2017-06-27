@@ -1,7 +1,13 @@
 # Minesweeper
 Minesweeper clone in Javascript using p5.js
 
-#Functinoality So Far:
+# Functionality So Far:
+* Clicking reveals cells
+* Clicking a mine reveals all mines
+* Revealing mines creates particles / animation / explosion
+* Game states added
 
-
-#Things Missing:
+# Things Missing:
+* Timer
+* Score
+* Restart Game
