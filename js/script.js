@@ -1,8 +1,8 @@
 var CELL_SIZE; 			//pixel size of each cell
-const GRID_SIZE = 5; 	//number of cells in a row/col
+const GRID_SIZE = 20; 	//number of cells in a row/col
 const CANVAS_W = 401; 	//1 pixel extra to cover stroke()
 const CANVAS_H = 401;
-var MINE_COUNT = 3;		// number of mines total on grid
+var MINE_COUNT = 20;		// number of mines total on grid
 var myCanvas;			// html canvas reference
 var grid, mines, state, flagCount;				// all the coordinates for mines
 const PLAYING = 0, WON = 1, LOST = 2;
@@ -186,8 +186,10 @@ var score = () => (Math.floor((minesFlagged() / MINE_COUNT) * 100));
 var restartBtn = document.getElementById('restart');
 var scoreHolder = document.getElementById('score');
 
+document.getElementById('ui-holder').style.width = CANVAS_W + 'px';
+
 restartBtn.addEventListener('click', resetGame);
 
 function updateScore(s) {
-	scoreHolder.innerHTML = s;
+	scoreHolder.innerHTML = 'Score: ' + s;
 }

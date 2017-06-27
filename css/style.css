@@ -1,0 +1,47 @@
+body {
+	background: rgba(255,250,228,1);
+	font-family: 'Monaco', 'Courier New', fixed-width;
+}
+
+.center {
+	margin: 0 auto;
+}
+
+.wrapper {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	align-content: center;
+}
+
+.left {
+	float: right;
+}
+
+.right {
+	float: right;
+}
+
+.textCenter {
+	text-align: center;
+}
+
+.header {
+	margin: 10px 0 10px 0;
+}
+
+.button {
+  font-family: 'Monaco', 'Courier New', fixed-width;
+  color: #ffffff;
+  font-size: 13pt;
+  padding: 4px;
+  background: #6ad1e6;
+  text-decoration: none;
+}
+
+.button:hover {
+  background: #3cb0fd;
+  text-decoration: none;
+}
