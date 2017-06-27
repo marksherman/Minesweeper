@@ -1,14 +1,11 @@
-var grid;
 var CELL_SIZE; 			//pixel size of each cell
 const GRID_SIZE = 5; 	//number of cells in a row/col
 const CANVAS_W = 401; 	//1 pixel extra to cover stroke()
 const CANVAS_H = 401;
 var MINE_COUNT = 3;		// number of mines total on grid
 var myCanvas;			// html canvas reference
-var mines;				// all the coordinates for mines
-var state;
+var grid, mines, state, flagCount;				// all the coordinates for mines
 const PLAYING = 0, WON = 1, LOST = 2;
-var flagCount;
 
 function setup() {
 
