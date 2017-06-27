@@ -5,9 +5,11 @@ const CANVAS_W = 401; //1 pixel extra to cover stroke()
 const CANVAS_H = 401;
 var MINE_COUNT = 25;
 var myCanvas;
+var mines;
 
 function setup() {
 
+	mines = [];
 	grid = [];
 	CELL_SIZE = Math.floor(CANVAS_W / GRID_SIZE);
 	var MAX_MINES = GRID_SIZE * GRID_SIZE;
@@ -50,7 +52,20 @@ function mouseReleased() {
 
 	switch(mouseButton) {
 		case LEFT:
-			if(!grid[i][j].flagged) grid[i][j].reveal();
+
+			//If the cell is not flagegd,
+			//reveal the cell, if it's a mine, 
+			// explode all mines once.
+
+			if(!grid[i][j].flagged) {
+				grid[i][j].reveal();
+				
+				if(grid[i][j].mine) {
+					for(let s = 0; s < mines.length; s++) {
+						grid[mines[s][0]][mines[s][1]].explode();
+					}
+				}
+			}
 		break;
 
 		case RIGHT:
@@ -60,13 +75,17 @@ function mouseReleased() {
 }
 
 function setMines(count) {
+
 	while(count) {
 		let i = Math.floor(random(GRID_SIZE));
 		let j = Math.floor(random(GRID_SIZE));
 
 		if(grid[i][j].mine === false) {
+
+			mines.push([i, j]);
 			grid[i][j].mine = true;
 			count--;
+
 		}
 	}
 
@@ -106,4 +125,12 @@ function getNeighbors(i, j) {
 	}
 
 	return neighbors;
+}
+
+function gameOver() {
+
+}
+
+function resetGame() {
+
 }

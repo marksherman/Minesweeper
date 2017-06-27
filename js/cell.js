@@ -7,10 +7,40 @@ function Cell(i, j, size) {
 	this.y = j * size;
 
 	this.mine = false;
-	this.revealed = true;
+	this.revealed = false;
 	this.size = size;
 	this.flagged = false;
 	this.neighborMines = -1;
+
+	this.particles = [];
+}
+
+function Particle(x, y, vel, size) {
+	this.accel = createVector(0, 0.4);
+	this.lifetime = 150;
+	this.pos = createVector(x, y);
+	this.vel = vel;
+	this.size = size;
+
+	this.show = () => {
+		this.lifetime += (this.lifetime > 0) ? -1 : 0;
+		if(this.lifetime > 0) {
+
+			//Update position based on velocity
+			this.pos.add(this.vel);
+
+			//Update velocity based on acceleration
+			this.vel.add(this.accel);
+
+			//Add some drag
+			// this.vel.x += 2;
+
+			fill(35, 35, 35, 0.2);
+			noStroke();
+			ellipse(this.pos.x, this.pos.y, this.size);
+
+		}
+	}
 }
 
 Cell.prototype.show = function() {
@@ -35,7 +65,9 @@ Cell.prototype.show = function() {
 			textAlign(CENTER);
 			noStroke();
 			fill(50, 50, 50, 0.7);
-			text(this.neighborMines, this.x + offset, this.y + (offset * 1.75));
+			if(this.neighborMines !== 0) {
+				text(this.neighborMines, this.x + offset, this.y + (offset * 1.75));
+			}
 
 
 		}
@@ -56,6 +88,14 @@ Cell.prototype.show = function() {
 			rect(this.x, this.y, this.size, this.size);
 		}
 	}
+
+	if(this.particles.length) {
+		for(let b = this.particles.length - 1; b >= 0; b--) {
+			if(this.particles[b].lifetime > 0) {
+				this.particles[b].show();
+			}
+		}
+	}
 }
 
 Cell.prototype.reveal = function() {
@@ -68,4 +108,15 @@ Cell.prototype.setFlagged = function(flag) {
 
 Cell.prototype.setNeighborCount = function(c) {
 	this.neighborMines = c;
+}
+
+Cell.prototype.explode = function() {
+	this.revealed = true;
+	let s = this.size * 0.20;
+
+	for(let i = 0; i < 10; i++) {
+		let randVect = createVector(Math.floor(random(-6, 6)), Math.floor(random(-6, 6)));
+		this.particles.push(new Particle(this.x, this.y, randVect, s));
+	}
+
 }
