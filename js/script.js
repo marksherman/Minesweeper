@@ -12,35 +12,12 @@ var flagCount;
 
 function setup() {
 
-	mines = [];
-	grid = [];
-	CELL_SIZE = Math.floor(CANVAS_W / GRID_SIZE);
-	var MAX_MINES = GRID_SIZE * GRID_SIZE;
-	colorMode(RGB, 255, 255, 255, 1);
-	// Check if the mine count is more than the maximum allowed for this grid.
-	MINE_COUNT = (MINE_COUNT > MAX_MINES) ? MAX_MINES : MINE_COUNT; 
+	resetGame();
 
+	colorMode(RGB, 255, 255, 255, 1);
 	myCanvas = createCanvas(CANVAS_W, CANVAS_H);
 	myCanvas.parent('canvas-holder');
 
-	//stores the cells in a grid array
-	//used for iterating through all the cells
-	for(let i = 0; i < GRID_SIZE; i++) {
-		let temp = []
-		for(let j = 0; j < GRID_SIZE; j++) {
-			temp.push(new Cell(i, j, CELL_SIZE));
-		}
-		grid.push(temp);
-	}
-
-	//Randomly set the mines around the map
-	setMines(MINE_COUNT);
-	state = PLAYING;
-	flagCount = 0;
-
-	//User Interface
-	var resetButton = createButton('Restart');
-	
 }
 
 function draw() {
@@ -57,7 +34,7 @@ function mouseReleased() {
 	let i = Math.floor(mouseX / CELL_SIZE);
 	let j = Math.floor(mouseY / CELL_SIZE);
 
-	if(i > GRID_SIZE || j > GRID_SIZE || i < 0 || j < 0 || (state !== PLAYING)) return;
+	if(i > GRID_SIZE-1 || j > GRID_SIZE-1 || i < 0 || j < 0 || (state !== PLAYING)) return;
 
 	switch(mouseButton) {
 		case LEFT:
@@ -139,7 +116,9 @@ function getNeighbors(i, j) {
 }
 
 function revealCell(i, j) {
-	grid[i][j].reveal();
+	if(!grid[i][j].flagged) {
+		grid[i][j].reveal();
+	}
 
 	if(grid[i][j].neighborMines === 0) {
 		let myNeighbors = getNeighbors(i, j);
@@ -152,18 +131,40 @@ function revealCell(i, j) {
 }
 
 function gameOver() {
-	console.log('game lost');
-	console.log(score());
+	updateScore(score());
 	state = LOST;
 }
 
 function gameWon() {
-	console.log('game won');
-	console.log(score());
+	updateScore(score());
 	state = WON;
 }
 
 function resetGame() {
+	mines = [];
+	grid = [];
+	CELL_SIZE = Math.floor(CANVAS_W / GRID_SIZE);
+
+	// Check if the mine count is more than the maximum allowed for this grid.
+	var MAX_MINES = GRID_SIZE * GRID_SIZE;
+	MINE_COUNT = (MINE_COUNT > MAX_MINES) ? MAX_MINES : MINE_COUNT;
+
+	//stores the cells in a grid array
+	//used for iterating through all the cells
+	for(let i = 0; i < GRID_SIZE; i++) {
+		let temp = []
+		for(let j = 0; j < GRID_SIZE; j++) {
+			temp.push(new Cell(i, j, CELL_SIZE));
+		}
+		grid.push(temp);
+	}
+
+	//Randomly set the mines around the map
+	setMines(MINE_COUNT);
+	state = PLAYING;
+	flagCount = 0;
+
+	updateScore(0);
 
 }
 
@@ -180,5 +181,16 @@ function minesFlagged() {
 	}
 	return count;
 }
-
 var score = () => (Math.floor((minesFlagged() / MINE_COUNT) * 100));
+
+// USER INTERFACE AND INTERACTION
+// BEGINS HERE
+
+var restartBtn = document.getElementById('restart');
+var scoreHolder = document.getElementById('score');
+
+restartBtn.addEventListener('click', resetGame);
+
+function updateScore(s) {
+	scoreHolder.innerHTML = s;
+}
