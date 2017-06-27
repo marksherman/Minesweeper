@@ -7,7 +7,7 @@ function Cell(i, j, size) {
 	this.y = j * size;
 
 	this.mine = false;
-	this.revealed = false;
+	this.revealed = true;
 	this.size = size;
 	this.flagged = false;
 	this.neighborMines = -1;

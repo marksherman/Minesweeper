@@ -45,7 +45,8 @@ function draw() {
 function mouseReleased() {
 	let i = Math.floor(mouseX / CELL_SIZE);
 	let j = Math.floor(mouseY / CELL_SIZE);
-	console.log(i + ' ' + j);
+
+	if(!(i <= GRID_SIZE && j <= GRID_SIZE)) return;
 
 	switch(mouseButton) {
 		case LEFT:
@@ -72,22 +73,37 @@ function setMines(count) {
 	for(let i = 0; i < GRID_SIZE; i++) {
 		for(let j = 0; j < GRID_SIZE; j++) {
 			if(!grid[i][j].mine) {
-				grid[i][j].setNeighborCount(getNeighborCount(i, j));
+				grid[i][j].setNeighborCount(thisManyMines(getNeighbors(i, j)));
 			}
 		}
 	}
 }
 
-function getNeighborCount(a, b) {
+//This is used to pass in a list and find out HOW MANY of those are mines.
+function thisManyMines(list) {
 	var count = 0;
+	for(let x = 0; x < list.length; x++) {
+		count += grid[list[x].i][list[x].j].mine ? 1 : 0;
+	}
+	return count;
+}
 
-	for(let k = a - 1; k < a + 2; k++) {
-		for(let l = b - 1; l < b + 2; l++) {
-			if(k >= 0 && l >= 0 && l < GRID_SIZE && k < GRID_SIZE && !(k === a && l === b)) {
-				count += grid[k][l].mine ? 1 : 0;
+//Returns an array of objects that contains
+//the neighbors of that coordinate pair
+function getNeighbors(i, j) {
+	var neighbors = [];
+
+	for(let k = i - 1; k < i + 2; k++) {
+		for(let l = j - 1; l < j + 2; l++) {
+			if(k >= 0 && l >= 0 && l < GRID_SIZE && k < GRID_SIZE && !(k === i && l === j)) {
+				let obj = {
+					i: k,
+					j: l
+				};
+				neighbors.push(obj);
 			}
 		}
 	}
 
-	return count;
+	return neighbors;
 }
