@@ -13,11 +13,14 @@ var MIN_MINES, MAX_MINES;
 var scoreHolder, restartBtn, particles;
 
 function setup() {
+	colorMode(RGB, 255, 255, 255, 1);
+	
+	let tempWidth = Math.floor(window.innerHeight * 0.8);
+	CANVAS_W = CANVAS_H = tempWidth < 801 ? tempWidth : 801;
 
 	userInterface();
 	resetGame();
 	
-	colorMode(RGB, 255, 255, 255, 1);
 	myCanvas = createCanvas(CANVAS_W, CANVAS_H);
 	myCanvas.parent('canvas-holder');
 
@@ -180,18 +183,16 @@ function resetGame() {
 	grid = [];
 	GRID_SIZE = diff.value;
 
-	document.getElementById('ui-holder').style.width = CANVAS_W + 'px';
-
-	let tempWidth = Math.floor(window.innerWidth * 0.8);
-	CANVAS_W = CANVAS_H = tempWidth < 801 ? tempWidth : 801;
-
+	document.getElementById('ui-holder').style.width = CANVAS_W + 'px';	
+	
+	// if(myCanvas !== undefined) resize();
 	//Minimum = 15% of the board are mines
 	//Maximum = 20% of the board are mines
 	MIN_MINES = 0.15 * GRID_SIZE * GRID_SIZE;
 	MAX_MINES = 0.20 * GRID_SIZE * GRID_SIZE;
 
 	MINE_COUNT = Math.floor(random(MIN_MINES, MAX_MINES));
-	CELL_SIZE = Math.floor(CANVAS_W / GRID_SIZE);
+	CELL_SIZE = CANVAS_H / GRID_SIZE;
 
 	//stores the cells in a grid array
 	//used for iterating through all the cells
