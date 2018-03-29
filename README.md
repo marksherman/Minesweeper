@@ -11,3 +11,5 @@ Minesweeper clone in Javascript using p5.js
 * Timer
 * Score
 * Restart Game
+
+Live demo: http://www.amanbhimani.com/minesweeper
