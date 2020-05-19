@@ -55,7 +55,7 @@ function Cell(i, j, size) {
 				textAlign(CENTER);
 				noStroke();
 				fill(50, 50, 50, 0.7);
-				text('?', this.x + offset, this.y + (offset * 1.75));
+				text('🚩', this.x + offset, this.y + (offset * 1.75));
 			} 
 			//not flagged
 			else {
