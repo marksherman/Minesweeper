@@ -316,3 +316,7 @@ function minesFlagged() {
 
 //Returns the score in a percentage format.
 var score = () => (Math.floor((minesFlagged() / MINE_COUNT) * 100));
+
+//Reporting functions for game (priviledged) and AI (unpriviledged)
+var game_log = console.log;
+var ai_log = console.log;
