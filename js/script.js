@@ -62,6 +62,10 @@ function draw() {
 	if(state !== PLAYING) {
 		displayEndGame();
 	}
+  
+  if(state === PLAYING) {
+    updateCursorPos();
+  }
 }
 
 //Sets values related to the DOM and creates events
@@ -272,6 +276,16 @@ function displayEndGame() {
 //Update DOM element with score (once game is over)
 function updateScore(s) {
 	scoreHolder.innerHTML = 'Score: ' + s + ' / 100';
+}
+
+//Borrow the score DOM element to show the current grid postion under cursor
+function updateCursorPos() {
+  //Position of mouse
+  let i = Math.floor(mouseX / CELL_SIZE);
+  let j = Math.floor(mouseY / CELL_SIZE);
+  i = constrain(i, 0, GRID_SIZE);
+  j = constrain(j, 0, GRID_SIZE);
+  scoreHolder.innerHTML = i + ', ' + j; 
 }
 
 
