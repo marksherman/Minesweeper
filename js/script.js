@@ -91,40 +91,48 @@ function mouseReleased() { //Is called every time a mouse button is released
 
 	switch(mouseButton) {
 		case LEFT:
-			//If the cell is not flagged
-			//And is a mine, Game over.
-			if(!grid[i][j].flagged) {
-				if(grid[i][j].mine) {
-					for(let s = 0; s < mines.length; s++) {
-						grid[mines[s][0]][mines[s][1]].explode(particles.checked);
-					}
-					gameOver();
-				} 
-				else { //Show the cell contents
-					revealCell(i, j);
-				}
-			}
+			touchCell(i, j);
 		break;
 
 		case RIGHT:
-			//If flagged, remove it.
-			if(grid[i][j].flagged) {
-				grid[i][j].setFlagged(false);
-				flags--;
-			} 
-			//Cannot let the user create more flags than there are mines
-			else if(flags < MINE_COUNT) {
-				grid[i][j].setFlagged(true);
-				
-				//No need to do checkWin() if flags does not equal mineCount.
-				if(++flags != MINE_COUNT) {
-					return;
-				}
-			}
-
-			checkWin();
+			flagCell(i, j);
 		break;
 	}
+}
+
+function touchCell(i, j) {
+	//If the cell is not flagged
+	//And is a mine, Game over.
+	if(!grid[i][j].flagged) {
+		if(grid[i][j].mine) {
+			for(let s = 0; s < mines.length; s++) {
+				grid[mines[s][0]][mines[s][1]].explode(particles.checked);
+			}
+			gameOver();
+		} 
+		else { //Show the cell contents
+			revealCell(i, j);
+		}
+	}
+}
+
+function flagCell(i, j) {
+	//If flagged, remove it.
+	if(grid[i][j].flagged) {
+		grid[i][j].setFlagged(false);
+		flags--;
+	} 
+	//Cannot let the user create more flags than there are mines
+	else if(flags < MINE_COUNT) {
+		grid[i][j].setFlagged(true);
+		
+		//No need to do checkWin() if flags does not equal mineCount.
+		if(++flags != MINE_COUNT) {
+			return;
+		}
+	}
+
+	checkWin();
 }
 
 function resetGame() {
