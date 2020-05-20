@@ -130,10 +130,10 @@ function resetGame() {
 
 	document.getElementById('ui-holder').style.width = CANVAS_W + 'px';	
 	
-	//Minimum = 15% of the board are mines
-	//Maximum = 20% of the board are mines
-	MIN_MINES = 0.15 * GRID_SIZE * GRID_SIZE;
-	MAX_MINES = 0.20 * GRID_SIZE * GRID_SIZE;
+	//Minimum = 10% of the board are mines
+	//Maximum = 14% of the board are mines
+	MIN_MINES = 0.10 * GRID_SIZE * GRID_SIZE;
+	MAX_MINES = 0.14 * GRID_SIZE * GRID_SIZE;
 
 	//Random number of mines
 	MINE_COUNT = Math.floor(random(MIN_MINES, MAX_MINES));
