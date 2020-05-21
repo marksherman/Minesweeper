@@ -155,7 +155,7 @@ function flagCell (i, j) {
 function resetGame () {
   mines = [];
   grid = [];
-  GRID_SIZE = diff.value;
+  GRID_SIZE = Number(diff.value);
 
   document.getElementById('ui-holder').style.width = CANVAS_W + 'px';
 
