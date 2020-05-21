@@ -7,6 +7,8 @@ Original Date: June 2017
 // Event Reporter for communication with AI agent
 const reporter = new GameReporter();
 
+var ai; // the AI object
+
 var CANVAS_W, CANVAS_H; // Width and height of canvas
 var GRID_SIZE, CELL_SIZE; // physical dimensions of the board
 var MINE_COUNT; // number of mines total on grid
@@ -183,11 +185,34 @@ function resetGame () {
   state = PLAYING;
   flags = 0;
   updateScore(0);
+
+  setupAI();
+
   reporter.gameReset();
+}
+
+function keyPressed () {
+  if (keyCode === 32) {
+    ai.move();
+  }
 }
 
 //* ****************************\\
 //          Helpers            \\
+
+function setupAI () {
+  let touch = (i, j) => {
+    reporter.aiTouch(i, j);
+    touchCell(i, j);
+  }
+
+  let flag = (i, j) => {
+    reporter.aiFlag(i, j);
+    flagCell(i, j);
+  }
+
+  ai = new AI(touch, flag);
+}
 
 // Sets count amount of mines in the global grid
 function setMines (count) {
