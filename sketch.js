@@ -4,6 +4,9 @@ Git: https://github.com/amanb014/Minesweeper
 Original Date: June 2017
 */
 
+// Event Reporter for communication with AI agent
+const reporter = new GameReporter();
+
 var CANVAS_W, CANVAS_H; // Width and height of canvas
 var GRID_SIZE, CELL_SIZE; // physical dimensions of the board
 var MINE_COUNT; // number of mines total on grid
@@ -110,6 +113,7 @@ function mouseReleased () {
 }
 
 function touchCell (i, j) {
+  reporter.cellTouched(i, j);
   // If the cell is not flagged
   // And is a mine, Game over.
   if (!grid[i][j].flagged) {
@@ -130,14 +134,17 @@ function flagCell (i, j) {
   if (grid[i][j].flagged) {
     grid[i][j].setFlagged(false);
     flags--;
+    reporter.cellUnFlagged(i, j);
   } else if (flags < MINE_COUNT) {
     // Cannot let the user create more flags than there are mines
     grid[i][j].setFlagged(true);
-
+    reporter.cellFlagged(i, j);
     // No need to do checkWin() if flags does not equal mineCount.
     if (++flags !== MINE_COUNT) {
       return;
     }
+  } else if (flags >= MINE_COUNT) {
+    reporter.cellNotFlagged(i, j);
   }
 
   checkWin();
@@ -176,6 +183,7 @@ function resetGame () {
   state = PLAYING;
   flags = 0;
   updateScore(0);
+  reporter.gameReset();
 }
 
 //* ****************************\\
@@ -240,6 +248,7 @@ function getNeighbors (i, j) {
 function revealCell (i, j) {
   if (!grid[i][j].flagged) {
     grid[i][j].reveal();
+    reporter.cellRevealed(i, j);
   }
 
   // If the neighbor has 0 mines, reveal it.
@@ -257,12 +266,14 @@ function revealCell (i, j) {
 function gameOver () {
   updateScore(score());
   state = LOST;
+  reporter.gameLost();
 }
 
 // Set game state to win
 function gameWon () {
   updateScore(score());
   state = WON;
+  reporter.GameWon();
 }
 
 // DOM manipulation based on game state
@@ -288,13 +299,13 @@ function displayEndGame () {
   text(msg, CANVAS_W / 2, CANVAS_H / 2);
 
   textSize(CANVAS_W / 16);
-  msg = 'SCORE: ' + score() + ' / 100';
+  msg = `SCORE: ${score()} / 100`;
   text(msg, CANVAS_W / 2, CANVAS_H / 2 + 80);
 }
 
 // Update DOM element with score (once game is over)
 function updateScore (s) {
-  scoreHolder.innerHTML = 'Score: ' + s + ' / 100';
+  scoreHolder.innerHTML = `Score: ${s} / 100`;
 }
 
 // Borrow the score DOM element to show the current grid postion under cursor
@@ -304,7 +315,7 @@ function updateCursorPos () {
   let j = Math.floor(mouseY / CELL_SIZE);
   i = constrain(i, 0, GRID_SIZE);
   j = constrain(j, 0, GRID_SIZE);
-  scoreHolder.innerHTML = i + ', ' + j;
+  scoreHolder.innerHTML = `${i}, ${j}`;
 }
 
 // Are all the mines flagged?
@@ -326,7 +337,3 @@ function minesFlagged () {
 
 // Returns the score in a percentage format.
 var score = () => Math.floor(minesFlagged() / MINE_COUNT * 100);
-
-// Reporting functions for game (priviledged) and AI (unpriviledged)
-const gameLog = console.log;
-const aiLog = console.log;
