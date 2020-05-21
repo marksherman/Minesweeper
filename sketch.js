@@ -273,7 +273,7 @@ function gameOver () {
 function gameWon () {
   updateScore(score());
   state = WON;
-  reporter.GameWon();
+  reporter.gameWon();
 }
 
 // DOM manipulation based on game state
